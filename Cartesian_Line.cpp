@@ -73,6 +73,21 @@ Cartesian_Line::Cartesian_Line(Posi_Pose PP0, Posi_Pose PPf, enum P2Pmethod cht_
 		Vc = speed_percent *V_max;
 		Wc = speed_percent *W_max;
 		V_Vc_Wc = Vector(Vc, Wc);
+		
+		if ((cht == trapez) || (cht == halfcos))
+		{
+			Vector max_speed_p = Vdevide(V_Vc_Wc, V_Vmax_Wmax );
+
+			double min_speed_p = max_speed_p.Max();
+
+			if (speed_percent>min_speed_p)
+			{
+				printf("%f \n", min_speed_p);
+				printf("速度百分比需小于上述值");
+				throw("速度百分比需小于上述值");
+
+			}
+		}
 	}
 	
 	if ((tf_speedp >=0 )&& (method == time))

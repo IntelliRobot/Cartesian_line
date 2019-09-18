@@ -77,14 +77,14 @@ void Cubic_spline_rt(Vector &qt, Vector &qdt, Vector &qddt, const Cubic_Coef &CC
 
 Vector Halfcos_Tf(const Vector & s, const Vector & qd0, const Vector & qdf, const Vector & qdmax, const Vector & qddmax);
 
-void Halfcos_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Vector &qdf, enum TIMEorSPEED method,Vector Tf,
-	const Vector &V_Vc_Wc, Vector &qdmax, Vector &qddmax, Halfcos_Coef &HC);
+void Halfcos_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Vector &qdf, enum TIMEorSPEED method,double tf,
+	const Vector &V_Vc_Wc, const Vector &qddmax, Halfcos_Coef &HC, const int &tf_max_index);
 
 void Halfcos_rt(Vector &qt, Vector &qdt, Vector &qddt,const Halfcos_Coef &HC, double &t);
 
 Vector Trapez_Tf(const Vector & s, const Vector & qd0, const Vector & qdf, const Vector & qdmax, const Vector & qddmax);
 
-void Trapez_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Vector &qdf, enum TIMEorSPEED method, Vector &Tf, 
-	const Vector &qdc,const Vector &qdmax, const Vector &qddmax, Trapez_Coef &TC);
+void Trapez_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Vector &qdf, enum TIMEorSPEED method, double tf, 
+	const Vector &qdc, const Vector &qddmax, Trapez_Coef &TC,const int &tf_max_index);
 
 void Trapez_rt(Vector &qt, Vector &qdt, Vector &qddt, Trapez_Coef &TC, double &t);

@@ -407,14 +407,14 @@ void Cubic_spline_coef(const Vector &q0, const Vector &qf, const Vector &qd0, co
 	}
 }
 
-void Halfcos_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Vector &qdf, enum TIMEorSPEED method,Vector Tf,  const Vector &V_Vc_Wc,
-	Vector &qdmax, Vector &qddmax,Halfcos_Coef &HC)
+void Halfcos_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Vector &qdf, enum TIMEorSPEED method,double tf,  const Vector &V_Vc_Wc,
+	 const Vector &qddmax,Halfcos_Coef &HC, const int &tf_max_index)
 {
 	
 	int N = qd0.COUNT;
-	int Max_tf_index=0;
-	//Vector scale = Vdevide(Tf,Vector(tf, N));
-	double tf=Tf.Max(Max_tf_index);
+	//int Max_tf_index=0;
+	////Vector scale = Vdevide(Tf,Vector(tf, N));
+	//double tf=Tf.Max(Max_tf_index);
 	
 	Vector s= qf - q0;
 	Vector dvc0(N, qd0.TYPE);
@@ -437,13 +437,13 @@ void Halfcos_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const V
 	for (int i = 0; i < N; i++)
 	{
 	
-		if ((Max_tf_index==i+1)&&(method==speed))
+		if ((tf_max_index==i+1)&&(method==speed))
 		{
 			qddc.pVector[i] = qddmax.pVector[i];
-			qdc.pVector[i] = V_Vc_Wc(Max_tf_index);
+			qdc.pVector[i] = V_Vc_Wc(tf_max_index);
 			continue;
 		}
-		if ((Max_tf_index == i + 1) && (method == time))
+		if ((tf_max_index == i + 1) && (method == time))
 		{
 			qddc.pVector[i] = qddmax.pVector[i];
 			qdc.pVector[i] = sqrt(2.0*qddmax.pVector[i] * fabs(s.pVector[i])/PI);
@@ -556,13 +556,13 @@ Vector Halfcos_Tf(const Vector & s, const Vector & qd0, const Vector & qdf, cons
 
 }
 
-void Trapez_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Vector &qdf,  enum TIMEorSPEED method , Vector &Tf, const Vector &V_Vc_Wc,
-	const Vector &qdmax, const Vector &qddmax,Trapez_Coef &TC )
+void Trapez_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Vector &qdf, enum TIMEorSPEED method, double tf, const Vector &V_Vc_Wc,
+	const Vector &qddmax, Trapez_Coef &TC, const int &tf_max_index)
 {
 	int N = qd0.COUNT;
-	int Max_tf_index = 0;
+	//int Max_tf_index = 0;
 	//Vector scale = Vdevide(Tf,Vector(tf, N));
-	double tf = Tf.Max(Max_tf_index);
+	//double tf_min_limit=Tf.Max(Max_tf_index);
 
 	Vector s = qf - q0;
 	Vector dvc0(N, qd0.TYPE);
@@ -585,13 +585,13 @@ void Trapez_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Ve
 	for (int i = 0; i < N; i++)
 	{
 
-		if ((Max_tf_index == i + 1) && (method == speed))
+		if ((tf_max_index == i + 1) && (method == speed))
 		{
 			qddc.pVector[i] = qddmax.pVector[i];
-			qdc.pVector[i] = V_Vc_Wc(Max_tf_index);
+			qdc.pVector[i] = V_Vc_Wc(tf_max_index);
 			continue;
 		}
-		if ((Max_tf_index == i + 1) && (method == time))
+		if ((tf_max_index == i + 1) && (method == time))
 		{
 			qddc.pVector[i] = qddmax.pVector[i];
 			qdc.pVector[i] = sqrt(qddmax.pVector[i] * fabs(s.pVector[i]));
@@ -624,7 +624,7 @@ void Trapez_coef(const Vector &q0, const Vector &qf, const Vector &qd0, const Ve
 	
 	TC.Tc = Vdevide(dvc0.Abs(), qddc);
 
-	TC.Tl =  Vector(tf,tf) - Vdevide(dvcf.Abs(), qddc);
+	TC.Tl =  Vector(tf,N) - Vdevide(dvcf.Abs(), qddc);
 	TC.A1 = Vmultiply(dvc0.Sign(), qddc);
 	TC.A2 = Vmultiply(dvcf.Sign(), qddc);
 	Vector vvc0 = Vmultiply(qdc, qdc) - Vmultiply(qd0, qd0);
